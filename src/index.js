@@ -22,10 +22,13 @@ const onFormSubmit = evt => {
     unsplashAPI.q = evt.currentTarget.searchQuery.value.trim();
  
     evt.currentTarget.searchQuery.value = '';
+    if (unsplashAPI.page > 1) {
+        unsplashAPI.page = 1;
+    }
 
     unsplashAPI.fetchPhotos().then(data => { 
         galleryEl.innerHTML = createGalleryCards(data.hits);
-        if (!data.total) {
+        if (!data.total || data.hits === []) {
             Notify.failure(
     'Sorry, there are no images matching your search query. Please try again.'
   );
