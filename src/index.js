@@ -45,7 +45,7 @@ const onFormSubmit = async evt => {
                 'Sorry, there are no images matching your search query. Please try again.'
             );
         }
-        
+
         if (data.totalHits === unsplashAPI.total) {
             return;
         }
@@ -77,6 +77,7 @@ const onLoadMoreBtnClick = async () => {
                 btnLoadMore.classList.add('is-hidden');
         }
         btnLoadMore.disabled = false;
+        smoothScroll();
     
     } catch (err) { console.log(err) };
 }; 
@@ -86,6 +87,16 @@ searchFormEl.addEventListener('submit', onFormSubmit);
 btnLoadMore.addEventListener('click', onLoadMoreBtnClick);
 
 
+function smoothScroll() {
+  const { height: cardHeight } = document
+    .querySelector('.gallery')
+    .firstElementChild.getBoundingClientRect();
+
+  window.scrollBy({
+    top: cardHeight * 2,
+    behavior: 'smooth',
+  });
+}
 
 
 
