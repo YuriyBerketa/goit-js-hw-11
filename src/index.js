@@ -15,6 +15,9 @@ const unsplashAPI = new UnsplashAPI();
 
 const onFormSubmit = evt => {
     evt.preventDefault();
+    window.scrollTo(0, 0);
+    btnLoadMore.classList.add('is-hidden');
+
     if (evt.currentTarget.searchQuery.value === '') {
         return;
     }
@@ -22,9 +25,7 @@ const onFormSubmit = evt => {
     unsplashAPI.q = evt.currentTarget.searchQuery.value.trim();
  
     evt.currentTarget.searchQuery.value = '';
-    if (unsplashAPI.page > 1) {
-        unsplashAPI.page = 1;
-    }
+    unsplashAPI.page = 1;
 
     unsplashAPI.fetchPhotos().then(data => { 
         galleryEl.innerHTML = createGalleryCards(data.hits);
@@ -48,11 +49,13 @@ const onFormSubmit = evt => {
 
 const onLoadMoreBtnClick = () => {
     unsplashAPI.page += 1;
+    btnLoadMore.disabled = true;
+
     unsplashAPI.fetchPhotos().then(data => {
         galleryEl.insertAdjacentHTML('beforeend', createGalleryCards(data.hits));
 
          if (unsplashAPI.page * unsplashAPI.count >= data.totalHits) {
-        Notify.failure(
+        Notify.warning(
     'We re sorry, but you ve reached the end of search results.'
              );
         btnLoadMore.classList.add('is-hidden');
